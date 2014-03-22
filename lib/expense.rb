@@ -11,6 +11,13 @@ class Expense
     @id = attributes['id'].to_i
   end
 
+  def self.create(attributes)
+    new_expense = self.new(attributes)
+    new_expense.save
+    new_expense
+  end
+
+
   def self.all
     list = []
     results = DB.exec("SELECT * FROM expense;")
@@ -18,6 +25,39 @@ class Expense
       list << Expense.new(result)
     end
     list
+  end
+
+  def delete_expense
+  DB.exec("DELETE FROM expense WHERE id = #{@id};")
+  end
+
+  def self.total_expense
+    results = DB.exec("SELECT sum(amount) FROM expense;")
+    results.first['sum'].to_f
+  end
+
+  def self.category_expense(category_id)
+    results = DB.exec("SELECT sum(amount) FROM expense WHERE category_id = #{category_id};")
+    results.first['sum'].to_f
+  end
+
+  def self.total_expense_percentage
+    percents = []
+    category_ids = []
+
+    self.all.each do |items|
+      category_ids << items.category_id
+    end
+
+    category_ids.uniq.each do |ids|
+      percents << [ids, self.category_expense(ids) / self.total_expense]
+    end
+    percents
+  end
+
+  def self.fetch_category_name(category_id)
+    results = DB.exec("SELECT * FROM category WHERE id = #{category_id};")
+      results.first['name']
   end
 
   def save

@@ -16,8 +16,14 @@ class Company
     all_companies
   end
 
+  def self.create(attributes)
+    new_company = Company.new(attributes)
+    new_company.save
+    new_company
+  end
+
   def save
-    returned_id = DB.exec("INSERT INTO company (name, id) VALUES ('#{@name}', #{@id}) RETURNING id;")
+    returned_id = DB.exec("INSERT INTO company (name) VALUES ('#{@name}') RETURNING id;")
     @id = returned_id.first['id']
   end
 

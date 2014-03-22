@@ -12,6 +12,10 @@ describe Category do
     it 'returns an array of all the categories in the database' do
       Category.all.should eq []
     end
+    it 'returns an array with the elements' do
+      test_category = Category.create({'name' => 'food'})
+      Category.all[0].name.should eq 'food'
+    end
   end
 
   describe '#save' do

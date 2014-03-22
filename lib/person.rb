@@ -17,7 +17,7 @@ class Person
   end
 
   def save
-    returned_id = DB.exec("INSERT INTO person (name, id) VALUES ('#{@name}', #{@id}) RETURNING id;")
+    returned_id = DB.exec("INSERT INTO person (name) VALUES ('#{@name}') RETURNING id;")
     @id = returned_id.first['id']
   end
 

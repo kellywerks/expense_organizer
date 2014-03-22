@@ -88,4 +88,30 @@ describe Expense do
       result.count.should eq 1
     end
   end
+
+  describe '.total_expense' do
+    it 'gets the total expense of all purchases' do
+      test_expense = Expense.create({'name' => "Burger", 'amount' => 5, 'date' => '1214-12-08', 'company_id' => 2, 'person_id' => 1, 'category_id' => 3})
+      test_expense2 = Expense.create({'name' => "Cat", 'amount' => 20.0, 'date' => '1214-12-08', 'company_id' => 1, 'person_id' => 2, 'category_id' => 3})
+      Expense.total_expense.should eq 25.0
+    end
+  end
+
+  describe '.category_expense' do
+    it 'gets the total expense percentage of all purchases of that category' do
+      test_expense = Expense.create({'name' => "Burger", 'amount' => 10.0, 'date' => '1214-12-08', 'company_id' => 2, 'person_id' => 1, 'category_id' => 1})
+      test_expense2 = Expense.create({'name' => "Cat", 'amount' => 20.0, 'date' => '1214-12-08', 'company_id' => 1, 'person_id' => 2, 'category_id' => 3})
+      test_expense3 = Expense.create({'name' => "Dog", 'amount' => 70.0, 'date' => '1214-12-08', 'company_id' => 1, 'person_id' => 2, 'category_id' => 3})
+      Expense.category_expense(3).should eq 90.0
+    end
+  end
+
+  describe '.total_expense_percentage' do
+    it 'gets all category expenses by percentage' do
+      test_expense = Expense.create({'name' => "Burger", 'amount' => 10.0, 'date' => '1214-12-08', 'company_id' => 2, 'person_id' => 1, 'category_id' => 1})
+      test_expense2 = Expense.create({'name' => "Cat", 'amount' => 20.0, 'date' => '1214-12-08', 'company_id' => 1, 'person_id' => 2, 'category_id' => 3})
+      test_expense3 = Expense.create({'name' => "Dog", 'amount' => 70.0, 'date' => '1214-12-08', 'company_id' => 1, 'person_id' => 2, 'category_id' => 3})
+      Expense.total_expense_percentage.should eq [[1, 0.1], [3, 0.9]]
+    end
+  end
 end
